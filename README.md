@@ -1,6 +1,6 @@
 # Swaggies by WackyDawg
 
-![Swaggies by WackyDawg Logo](link_to_logo.png)
+![Swaggies by WackyDawg Logo](https://static.paidviewpoint.com/images/earnings/green_piggy.png)
 
 Swaggies by WackyDawg is not your ordinary mobile wallet app. It's designed to make managing your finances fun, engaging, and, well, wacky! With a playful and user-friendly interface, unique savings challenges, and a few surprises up its sleeve, Swaggies is here to help you navigate your financial world with a smile.
 
