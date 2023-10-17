@@ -1,6 +1,21 @@
-# Swaggies by WackyDawg
+<p align="center">
+  <img src="[https://static.paidviewpoint.com/images/earnings/green_piggy.png](https://static.paidviewpoint.com/images/earnings/green_piggy.png)" alt="wackydawg" width="400" />
+</p>
 
-![Swaggies by WackyDawg Logo](https://static.paidviewpoint.com/images/earnings/green_piggy.png)
+<h1 align="center">Express CRUD API</h1>
+
+<p align="center">
+  
+</p>
+
+<p align="center">
+  <b>Swaggies by WackyDawg : Your playful 🎉 and wacky 🤪 companion for managing your finances with a smile 😊. Experience unique savings challenges 🎯, customizable avatars 🎨, and a world of financial fun 🎈, all wrapped up in a secure 🔒 and user-friendly mobile wallet app 📲.</span></br>
+  <sub>Made with ❤️ by <a href="https://github.com/WackyDawg">Julian Nwadinobi(wackydawg)</a></sub>
+</p>
+
+<br />
+
+![divider](./assets/images/divider.png)
 
 Swaggies by WackyDawg is not your ordinary mobile wallet app. It's designed to make managing your finances fun, engaging, and, well, wacky! With a playful and user-friendly interface, unique savings challenges, and a few surprises up its sleeve, Swaggies is here to help you navigate your financial world with a smile.
 
