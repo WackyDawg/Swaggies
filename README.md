@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="[https://static.paidviewpoint.com/images/earnings/green_piggy.png](https://static.paidviewpoint.com/images/earnings/green_piggy.png)" alt="wackydawg" width="400" />
+  <img src="https://static.paidviewpoint.com/images/earnings/green_piggy.png" alt="wackydawg" width="400" />
 </p>
 
-<h1 align="center">Express CRUD API</h1>
+<h1 align="center">Swaggies</h1>
 
 <p align="center">
   
@@ -17,6 +17,7 @@
 
 ![divider](./assets/images/divider.png)
 
+## Why Swaggies
 Swaggies by WackyDawg is not your ordinary mobile wallet app. It's designed to make managing your finances fun, engaging, and, well, wacky! With a playful and user-friendly interface, unique savings challenges, and a few surprises up its sleeve, Swaggies is here to help you navigate your financial world with a smile.
 
 ## Features
