@@ -1,0 +1,24 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-status-monitor": "^1.3.4",
+    "mongoose": "^7.5.3",
+    "nodemon": "^3.0.1",
+    "passport": "^0.6.0"
+  },
+  "scripts": {
+    "start-all-servers": "concurrently \"npm start --prefix ./backend\" \"npm start --prefix ./cdn\" \"npm run start-desktop\" \"npm run start-mobile\"",
+    "start-desktop": "npm start --prefix ./layouts/desktop",
+    "start-mobile": "npm start --prefix ./layouts/mobile"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
+}

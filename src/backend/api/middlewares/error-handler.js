@@ -1,4 +1,4 @@
-const httpStatus = require("http-status");
+import httpStatus from "http-status";
 
 const sendErrorDev = (err, req, res) => {
   // Development error handling - send the full error stack trace
@@ -15,7 +15,7 @@ const sendErrorProd = (err, req, res) => {
   console.error("ERROR", err);
   res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
     success: false,
-    message: httpStatus[httpStatus.INTERNAL_SERVER_ERROR],
+    message: httpStatus.getStatusText(httpStatus.INTERNAL_SERVER_ERROR),
   });
 };
 
@@ -38,4 +38,4 @@ const errorHandler = (err, req, res, next) => {
   }
 };
 
-module.exports = errorHandler;
+export default errorHandler;

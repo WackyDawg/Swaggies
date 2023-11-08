@@ -1,0 +1,62 @@
+e-wallet-system-main
+├── .dockerignore
+├── .env.example
+├── .gitignore
+├── api.env.example
+├── app.js
+├── config
+│   ├── db.js
+│   └── jwt.js
+├── controllers
+│   ├── transaction.controller.js
+│   ├── user.controller.js
+│   └── wallet.controller.js
+├── coverage
+├── docker-compose.yml
+├── Dockerfile
+├── helpers
+│   ├── json
+│   │   └── banks.json
+│   └── payment.helpers.js
+├── knexfile.js
+├── LICENSE
+├── middlewares
+│   ├── auth.js
+│   ├── error-handler.js
+│   └── set-wallet-pin.js
+├── migrations
+│   ├── 20220226055100_users.js
+│   ├── 20220226091212_wallets.js
+│   └── 20220227082352_transactions.js
+├── package-lock.json
+├── package.json
+├── Procfile
+├── README.md
+├── release-tasks.sh
+├── routes
+│   ├── index.js
+│   ├── transaction.route.js
+│   ├── user.route.js
+│   └── wallet.route.js
+├── server.js
+├── services
+│   ├── index.js
+│   ├── transaction.service.js
+│   ├── user.service.js
+│   └── wallet.service.js
+├── start-script.sh
+├── tests
+│   ├── transaction.test.js
+│   ├── user.test.js
+│   └── wallet.test.js
+├── utils
+│   ├── catchasync.js
+│   └── errors
+│       ├── app.error.js
+│       ├── badrequest.error.js
+│       ├── notfound.error.js
+│       └── unauthorized.error.js
+└── validations
+    ├── index.js
+    ├── user.validation.js
+    └── wallet.validation.js
