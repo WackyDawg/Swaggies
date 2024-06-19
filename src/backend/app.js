@@ -1,24 +1,22 @@
-import express from 'express'; 
-import dotenv from 'dotenv';
-import xss from 'xss-clean';
-import helmet from 'helmet';
-import compression from 'compression';
-import cors from 'cors';
-import routes from './api/routes/index.js';
-import errorHandler from './api/middlewares/error-handler.js';
-//import NotFoundError from './api/utils/errors/notfound.error.js';
-
-dotenv.config(); 
+require("dotenv").config();
+require("./config/db").connect();
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const bodyParser = require('body-parser');
+const xss = require('xss-clean');
+const helmet = require('helmet');
+const compression = require('compression');
+const cors = require('cors');
+const userRouter = require('./routes/userRoutes.js'); 
+const NotFoundError = require('./utils/errors/notfound.error.js');
 
 const app = express();
-
-
-import "dotenv/config";
+app.use(express.json());
 
 // set security HTTP headers
 app.use(helmet());
 
-// parse json request body
 app.use(express.json());
 
 // parse urlencoded request body
@@ -34,12 +32,13 @@ app.use(compression());
 app.use(cors());
 app.options("*", cors());
 
-//app.use(routes);
+const API_VERSION = process.env.api_v;
+
+app.use(`/api/${API_VERSION}/users`, userRouter); 
 
 app.use((req, res, next) => {
   next(new NotFoundError(`Cannot ${req.method} ${req.originalUrl}`));
 })
+// Logic here
 
-//app.use(errorHandler);
-
-export { app };
+module.exports = app;
