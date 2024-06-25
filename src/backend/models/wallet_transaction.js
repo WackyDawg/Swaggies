@@ -10,9 +10,14 @@ const walletTransactionSchema = new mongoose.Schema(
             required: true,
         },
 
-        isInflow: { type: Boolean },
+        isInflow: { 
+            type: Boolean
+        },
 
-        paymentMethod: { type: String, default: "flutterwave" },
+        paymentMethod: { 
+            type: String,
+            default: "flutterwave" 
+        },
 
         currency: { 
             type: String,
@@ -25,8 +30,13 @@ const walletTransactionSchema = new mongoose.Schema(
             required: [true, "payment status is required"],
             enum: ["successfull", "paid", "failed"]
         },
+
+        created_at: {
+            type: Date,
+            default: Date.now
+        },
     },
-    { timestamp: true }
+    
 );
 
 module.exports =mongoose.model("walletTransaction", walletTransactionSchema);

@@ -1,7 +1,7 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("../models/user");
-
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+const { generateToken } = require('../utils/jwtUtils');
 
 /**
  * Registers a new user.
@@ -14,7 +14,7 @@ const User = require("../models/user");
  */
 const registerUser = async (firstName, lastName, email, password) => {
     if (!(email && password && firstName && lastName)) {
-        throw new Error("All input is required")
+        throw new Error("All input is required");
     }
 
     const oldUser = await User.findOne({ email });
@@ -25,23 +25,19 @@ const registerUser = async (firstName, lastName, email, password) => {
     const encryptedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
-        first_name: firstName,
+        first_name: firstName, 
         last_name: lastName,
         email: email.toLowerCase(),
         password: encryptedPassword,
     });
 
-    const token = jwt.sign(
-        { user_id: user._id, email },
-        process.env.TOKEN_KEY,
-        { expiresIn: "2h" }
-    );
+    const token = generateToken(user);
 
     user.token = token;
     await user.save();
 
     return user;
-}
+};
 
 /**
  * Logs in a user.
@@ -52,51 +48,48 @@ const registerUser = async (firstName, lastName, email, password) => {
  */
 const loginUser = async (email, password) => {
     if (!(email && password)) {
-      throw new Error("Email and password are required");
+        throw new Error("Email and password are required");
     }
-  
+
     const user = await User.findOne({ email });
     if (!user) {
-      throw new Error("Invalid credentials");
+        throw new Error("Invalid credentials");
     }
-  
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new Error("Invalid credentials");
+        throw new Error("Invalid credentials");
     }
-  
-    const token = jwt.sign(
-      { user_id: user._id, email },
-      process.env.TOKEN_KEY,
-      { expiresIn: "2h" }
-    );
-  
+
+    const token = generateToken(user);
+
     user.token = token;
     await user.save();
-  
+
     return user;
-  };
-  
-  /**
+};
+
+/**
  * Fetches the profile of a user.
  * @param {string} userId - The ID of the user.
  * @returns {Promise<Object>} The user profile.
  * @throws {Error} If the user does not exist.
  */
-
-const getProfile = async(userId) => {
+const getProfile = async (userId) => {
     if (!userId) {
-      throw new Error("User Id is required")
+        throw new Error("User Id is required");
     }
 
-   const user = await User.findById({ userId });
+    const user = await User.findById(userId)
+    .select('-password -__v -token')
+    .lean();
 
-   if (!user) {
-    throw new Error("User not found");
-   }
+    if (!user) {
+        throw new Error("User not found");
+    }
 
-   return user;
-}  
+    return user;
+};
 
 module.exports = {
     registerUser,

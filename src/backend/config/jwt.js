@@ -1,7 +1,3 @@
-require('dotenv/config');
-
-const jwtConfig = {
-  appKey: process.env.APP_SECRET_KEY || 'secret',
+module.exports = {
+  TOKEN_KEY: process.env.TOKEN_KEY || 'tester'
 };
-
-module.exports = jwtConfig

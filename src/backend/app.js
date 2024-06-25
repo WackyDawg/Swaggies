@@ -9,6 +9,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 const cors = require('cors');
 const userRouter = require('./routes/userRoutes.js'); 
+const walletRouter = require('./routes/walletRoutes.js')
 const NotFoundError = require('./utils/errors/notfound.error.js');
 
 const app = express();
@@ -35,6 +36,7 @@ app.options("*", cors());
 const API_VERSION = process.env.api_v;
 
 app.use(`/api/${API_VERSION}/users`, userRouter); 
+app.use(`/api/${API_VERSION}/wallet`, walletRouter); 
 
 app.use((req, res, next) => {
   next(new NotFoundError(`Cannot ${req.method} ${req.originalUrl}`));

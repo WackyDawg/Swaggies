@@ -1,15 +1,32 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, default: mongoose } = require("mongoose");
 
 const walletSchema = Schema (
     {
-        balance: { type: Number, default: 0 },
+        walletName: {
+             type: String 
+        },
+
+        walletPin: {
+             type: String, 
+             default: null 
+        },
+
+        balance: {
+             type: Number,
+            default: 0 
+        },
+        
         userId: {
             type: Schema.Types.ObjectId,
-            required: true,
+            required: true, 
             ref: "users",
         },
+        transactions: [{ 
+            type: mongoose.Schema.Types.ObjectId,
+            ref: ''
+        }]
     },
     { timestamp: true },
 );
 
-module.exports = model("wallet", walletSchema);
+module.exports = model("Wallet", walletSchema);
