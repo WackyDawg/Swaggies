@@ -13,12 +13,13 @@ const makePayment = async (amount, user, redirect_url) => {
     try {
         const generatedTransactionReference = generateTransactionReference();
         const response = await axios.post("https://api.flutterwave.com/v3/payments", {
-            tx_ref: `wallet_funding_${generatedTransactionReference}`,
+            tx_ref: `swaggies_funding_${generatedTransactionReference}`,
             amount: amount,
             currency: "NGN",
             redirect_url: redirect_url,
             customer: {
                 email: user.email,
+                name: user.firstname + " " + user.lastname,
             },
             customizations: {
                 title: "Wallet Funding",
@@ -34,7 +35,7 @@ const makePayment = async (amount, user, redirect_url) => {
                 max_retry_attempt: 5, // Max retry (int)
             }
         });
-
+        //console.log(response)
         return response.data.data.link;
     } catch (error) {
         console.error("MakePayment Error >>", error.message);
@@ -49,7 +50,7 @@ const makePayment = async (amount, user, redirect_url) => {
  * @param {Object} user - The authenticated user object containing the JWT token.
  * @returns {Object} - The verified payment details.
  */
-const verifyPayment = async (transactionId, user) => {
+const verifyPayment = async (transactionId) => {
     try {
         const paymentVerification = await axios({
             method: "get",
@@ -57,10 +58,9 @@ const verifyPayment = async (transactionId, user) => {
             headers: {
                 Authorization: `Bearer ${process.env.FLUTTERWAVE_V3_SECRET_KEY}`,
                 'Content-Type': 'application/json',
-                'Authorization-Callback': `Bearer ${user.token}` // Including JWT token for verification callback
             }
         });
-
+        //console.log("Payment Verification:", paymentVerification)
         return paymentVerification.data.data;
     } catch (error) {
         console.error("VerifyPayment Error>>", error.message);
@@ -68,4 +68,73 @@ const verifyPayment = async (transactionId, user) => {
     }
 }
 
-module.exports = { makePayment, verifyPayment };
+const transferFund = async (amount, accountBank, accountNumber, narration, beneficiary_name, reference, callback_url) => {
+    try {
+        const generatedTransactionReference = generateTransactionReference();
+        const response = await axios.post("https://api.flutterwave.com/v3/transfers", {
+            account_bank: accountBank,
+            account_number: accountNumber,
+            amount: amount,
+            narration: narration,
+            currency: "NGN",
+            reference: reference || `swaggies_disburse_${generatedTransactionReference}`,
+            callback_url: callback_url,
+            debit_currency: "NGN"
+        }, {
+            headers: {
+                Authorization: `Bearer ${process.env.FLUTTERWAVE_V3_SECRET_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("WithdrawFund Error >>", error.message);
+        throw new Error(error.message);
+    }
+};
+
+
+const retryTransfer = async (transactionId) => {
+    try {
+        const response = await axios({
+            method: "get",
+            url: `https://api.flutterwave.com/v3/transfers/${transactionId}/retries`,
+            headers: {
+                Authorization: `Bearer ${process.env.FLUTTERWAVE_V3_SECRET_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        return response.data
+    } catch (error) {
+        console.error("Retry Transfer Error >>", error.message);
+        throw new Error(error.message);
+    }
+};
+
+
+// Get Transfer fees
+const getTransferFees = async (amount) => {
+    try {
+        const response = await axios({
+            method: "get",
+            url: `https://api.flutterwave.com/v3/transfers/fee?amount=${amount}`,
+            headers: {
+                 Authorization: `Bearer ${process.env.FLUTTERWAVE_V3_SECRET_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        return response.data
+    } catch (error) {
+        console.error("Get Transfer Fees Error >>", error.message);
+        throw new Error(error.message);
+    }
+}
+
+
+
+
+
+module.exports = { makePayment, verifyPayment, transferFund, retryTransfer, getTransferFees };

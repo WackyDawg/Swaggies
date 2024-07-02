@@ -10,6 +10,10 @@ const transactionSchema  = new mongoose.Schema(
             type: Number,
             trim: true,
         },
+        tx_ref: {
+           type: String,
+           required: [true, "tx_ref is required"]
+        },
         name: {
             type: String,
             required: [true, "name is required"],
@@ -19,9 +23,6 @@ const transactionSchema  = new mongoose.Schema(
             type: String,
             required: [true, "email is required"],
             trim: true,
-        },
-        phone: {
-            type: String,
         },
         amount: {
             type: Number,
@@ -34,7 +35,7 @@ const transactionSchema  = new mongoose.Schema(
         },
         paymentStatus: {
             type: String,
-            enum: ["successful", "pending", "failed"],
+            enum: ["successful", "pending", "failed"], 
             default: "pending",
         },
         paymentGateway: {

@@ -6,10 +6,23 @@ const walletTransactionSchema = new mongoose.Schema(
 
         userId: {
             type: String,
-            ref: "users",
+            ref: "User",
             required: true,
         },
+        walletId: {
+           type: String,
+           required: [true, "WalletId is required"]
+        },
+        transactionId: {
+            type: Number,
+            trim: true,
+        },
 
+        tx_ref: {
+           type: String,
+           required: [true, "tx_ref is required"]
+        },
+        
         isInflow: { 
             type: Boolean
         },
@@ -28,7 +41,7 @@ const walletTransactionSchema = new mongoose.Schema(
         status: {
             type: String,
             required: [true, "payment status is required"],
-            enum: ["successfull", "paid", "failed"]
+            enum: ["successful", "paid", "failed"]
         },
 
         created_at: {
@@ -39,4 +52,4 @@ const walletTransactionSchema = new mongoose.Schema(
     
 );
 
-module.exports =mongoose.model("walletTransaction", walletTransactionSchema);
+module.exports = mongoose.model("walletTransaction", walletTransactionSchema);

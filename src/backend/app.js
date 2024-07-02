@@ -9,7 +9,8 @@ const helmet = require('helmet');
 const compression = require('compression');
 const cors = require('cors');
 const userRouter = require('./routes/userRoutes.js'); 
-const walletRouter = require('./routes/walletRoutes.js')
+const walletRouter = require('./routes/walletRoutes.js');
+const webhookRoutes = require("./routes/webhookRoutes.js")
 const NotFoundError = require('./utils/errors/notfound.error.js');
 
 const app = express();
@@ -37,6 +38,8 @@ const API_VERSION = process.env.api_v;
 
 app.use(`/api/${API_VERSION}/users`, userRouter); 
 app.use(`/api/${API_VERSION}/wallet`, walletRouter); 
+app.use('/webhook', webhookRoutes);
+
 
 app.use((req, res, next) => {
   next(new NotFoundError(`Cannot ${req.method} ${req.originalUrl}`));

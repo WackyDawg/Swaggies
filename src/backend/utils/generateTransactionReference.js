@@ -2,9 +2,8 @@ const randomstring = require("randomstring");
 
 const generateTransactionReference = () => {
   return randomstring.generate({
-    length: 10,
-    charset: "alphanumeric",
-    capitalization: "uppercase",
+    length: 16, 
+    charset: "numeric",
   });
 };
 

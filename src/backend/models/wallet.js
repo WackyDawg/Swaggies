@@ -19,11 +19,11 @@ const walletSchema = Schema (
         userId: {
             type: Schema.Types.ObjectId,
             required: true, 
-            ref: "users",
+            ref: "User",
         },
         transactions: [{ 
-            type: mongoose.Schema.Types.ObjectId,
-            ref: ''
+            type: Schema.Types.ObjectId,
+            ref: 'walletTransactions'
         }]
     },
     { timestamp: true },

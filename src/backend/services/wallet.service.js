@@ -13,24 +13,25 @@ const { makePayment, verifyPayment, withdrawPayment } = require("../helpers/paym
  * @returns {Promise<Object>} The user's wallet or a message indicating no wallet exists.
  */
 const validateUserWallet = async (userId) => {
-   try {
-      const userWallet = await Wallet.findOne({ userId });
+  try {
+    const userWallet = await Wallet.findOne({ userId })
 
-      if (!userWallet) {
-        throw new NotFoundError("You Do Not Have Any Wallet");
-      }
+    if (!userWallet) {
+      throw new NotFoundError("You Do Not Have Any Wallet");
+    }
 
-      return userWallet; 
-   } catch (error) { 
-      if (error.isOperational) { 
-          console.error("User error:", error.message);
-          throw error; 
-      } else {
-          console.error("Internal server error while validating user wallet:", error);
-          throw new Error("Internal Server Error");
-      }
-   }
+    return userWallet;
+  } catch (error) {
+    if (error.isOperational) {
+      console.error("User error:", error.message);
+      throw error;
+    } else {
+      console.error("Internal server error while validating user wallet:", error);
+      throw new Error("Internal Server Error");
+    }
+  }
 }
+
 
 // /**
 //  * Retrieves the user's wallet by user ID.
@@ -118,8 +119,8 @@ const fundWallet = async (walletData) => {
 
    let appUrl;
    if (!frontendBaseUrl) {
-    appUrl = process.env.APP_URL ? process.env.APP_URL : "http://localhost:3000";
-   } else {
+    appUrl = process.env.APP_URL ? process.env.APP_URL : "http://localhost:9000";
+   } else { 
     appUrl = frontendBaseUrl
    }
 
@@ -127,17 +128,93 @@ const fundWallet = async (walletData) => {
 }
 
 const verifyWalletFunding = async (walletData) => {
-    const user = walletData.user;
-    console.log(user._id);
-    const payment = await verifyPayment(walletData.transaction_id);
-  console.log(payment.customer.email)
-    if (payment.customer.email !== user.email) {
+    try {
+      const payment = await verifyPayment(walletData.transaction_id);
+      const user = await User.findOne({ email: payment.customer.email });
+  
+      if (!user || payment.customer.email !== user.email) {
+        return Promise.reject({
+          success: false,
+          message: 'Could not verify payment',
+        });
+      }
+  
+      const existingTransaction = await Transaction.findOne({
+        userId: user._id,
+        transactionId: payment.id,
+      });
+  
+      if (existingTransaction) {
+        return Promise.resolve({
+          success: true,
+          message: 'Transaction already exists',
+        });
+      }
+  
+      const newTransaction = new Transaction({
+        userId: user._id,
+        transactionId: payment.id,
+        tx_ref: payment.tx_ref,
+        name: payment.customer.name,
+        email: payment.customer.email,
+        amount: payment.amount,
+        currency: payment.currency,
+        paymentStatus: payment.status,
+        paymentGateway: 'flutterwave',
+      });
+  
+      await newTransaction.save();
+  
+      const userWallet = await Wallet.findOne({ userId: user._id });
+      
+      if (!userWallet) {
+        return Promise.reject({
+          success: false,
+          message: 'User does not have a wallet',
+        });
+      }
+
+      const newWalletTransaction = new WalletTransaction({
+        amount: payment.amount,
+        userId: user._id,
+        walletId: userWallet._id,
+        transactionId: payment.id,
+        tx_ref: payment.tx_ref,
+        isInflow: true, 
+        paymentMethod: 'flutterwave',
+        currency: payment.currency,
+        status: payment.status,
+      });
+  
+      await newWalletTransaction.save();
+  
+      const updatedWallet = await Wallet.findOneAndUpdate(
+        { userId: user._id },
+        { $inc: { balance: payment.amount } },
+        { new: true }
+      );
+  
+      if (!updatedWallet) {
+        return Promise.reject({
+          success: false,
+          message: 'Failed to update wallet balance',
+        });
+      }
+  
+      // You can add more business logic here if needed
+  
+      return Promise.resolve({
+        success: true,
+        message: 'Payment verified successfully',
+      });
+    } catch (error) {
       return Promise.reject({
         success: false,
-        message: "Could not verify payment",
+        message: 'Error verifying payment',
+        error: error.message,
       });
     }
-  };
+};
 
 const transferFund = async () => {
     // Implementation here
