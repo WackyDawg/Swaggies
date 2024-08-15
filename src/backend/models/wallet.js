@@ -2,10 +2,6 @@ const { Schema, model, default: mongoose } = require("mongoose");
 
 const walletSchema = Schema (
     {
-        walletName: {
-             type: String 
-        },
-
         walletPin: {
              type: String, 
              default: null 
@@ -21,6 +17,20 @@ const walletSchema = Schema (
             required: true, 
             ref: "User",
         },
+        walletType: {
+            type: String,
+            required: true,
+            enum: ["primary", "savings", "emergency", "investment", "travel", "business", "kids"],
+            default: "primary"
+        },
+        pinAttempts: { 
+            type: Number, 
+            default: 0 
+        },
+        isBanned: { 
+            type: Boolean, 
+            default: false 
+        },    
         transactions: [{ 
             type: Schema.Types.ObjectId,
             ref: 'walletTransactions'

@@ -1,25 +1,35 @@
 const httpStatus = require("http-status");
-const userService = require("../services/user.service")
+const userService = require("../services/user.service");
+const walletService = require('../services/wallet.service');
 
  
-
 exports.registerUser = async (req, res) => {
   try {
-    const { first_name, last_name, email, password } = req.body;
-    const user = await userService.registerUser(first_name, last_name, email, password);
+    const { swag_id, first_name, last_name, email, password } = req.body;
+
+    const user = await userService.registerUser(swag_id, first_name, last_name, email, password);
+
+    const walletType = 'primary'; 
+    const wallet = await walletService.createWallet(user._id, walletType);
+
     res.status(httpStatus.CREATED).json({
       success: true,
-      message: "Registered successfully!",
-      results: user
+      message: 'Registered successfully!',
+      results: {
+        user,
+        wallet,
+      },
     });
   } catch (error) {
-    console.error("Register Error:", error);
+    console.error('Register Error:', error);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       success: false,
-      message: "An error occurred during registration. Please try again later."
+      message: 'An error occurred during registration. Please try again later.',
+      error: error.message,
     });
   }
-}; 
+};
+
 
 exports.loginUser = async (req, res) => {
   try {

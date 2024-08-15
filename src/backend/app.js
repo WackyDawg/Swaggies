@@ -10,7 +10,8 @@ const compression = require('compression');
 const cors = require('cors');
 const userRouter = require('./routes/userRoutes.js'); 
 const walletRouter = require('./routes/walletRoutes.js');
-const webhookRoutes = require("./routes/webhookRoutes.js")
+const webhookRoutes = require("./routes/webhookRoutes.js");
+const verificationRouter = require('./routes/verificationRoutes.js')
 const NotFoundError = require('./utils/errors/notfound.error.js');
 
 const app = express();
@@ -37,7 +38,8 @@ app.options("*", cors());
 const API_VERSION = process.env.api_v;
 
 app.use(`/api/${API_VERSION}/users`, userRouter); 
-app.use(`/api/${API_VERSION}/wallet`, walletRouter); 
+app.use(`/api/${API_VERSION}/wallet`, walletRouter);
+app.use(`/api/${API_VERSION}/kyc`, verificationRouter) 
 app.use('/webhook', webhookRoutes);
 
 

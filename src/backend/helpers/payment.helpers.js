@@ -1,5 +1,17 @@
 const axios = require('axios');
+const User = require('../models/user');
+const Wallet = require('../models/wallet')
+const NotFoundError = require("../utils/errors/notfound.error");
 const generateTransactionReference = require("../utils/generateTransactionReference");
+
+
+const getWalletByUserId = async (userId) => {
+    try {
+      return await Wallet.findOne({ userId });
+    } catch (error) {
+      throw new Error("Internal server error");
+    }
+  }; 
 
 /**
  * Make Payment with Flutterwave
@@ -68,17 +80,18 @@ const verifyPayment = async (transactionId) => {
     }
 }
 
-const transferFund = async (amount, accountBank, accountNumber, narration, beneficiary_name, reference, callback_url) => {
+const makeTransfer = async (amount, account_bank, account_number, narration, beneficiary_name,) => {
     try {
         const generatedTransactionReference = generateTransactionReference();
         const response = await axios.post("https://api.flutterwave.com/v3/transfers", {
-            account_bank: accountBank,
-            account_number: accountNumber,
+            account_bank: account_bank,
+            account_number: account_number,
             amount: amount,
-            narration: narration,
+            narration: narration, 
             currency: "NGN",
-            reference: reference || `swaggies_disburse_${generatedTransactionReference}`,
-            callback_url: callback_url,
+            reference:`swaggies_disburse_${generatedTransactionReference}`,
+            //debit_subaccount: '',
+            callback_url: 'https://www.example.com/ng/',
             debit_currency: "NGN"
         }, {
             headers: {
@@ -93,6 +106,34 @@ const transferFund = async (amount, accountBank, accountNumber, narration, benef
         throw new Error(error.message);
     }
 };
+
+async function makeP2PTransfer(swag_id, amount) {
+    console.log("swag id",swag_id)
+    const generatedTransactionReference = generateTransactionReference();
+    const recipient = await User.findOne({ swag_id }, 'swag_id first_name last_name');
+    console.log("recipient", recipient);
+    
+    if (!recipient) {
+        throw new NotFoundError(`Recipient with not found`);
+    }
+
+    const recipientWallet = await getWalletByUserId(recipient._id);
+    if (!recipientWallet) {
+        throw new NotFoundError("Recipient wallet Not Found");
+    }
+
+    recipientWallet.balance += amount;
+    await recipientWallet.save();
+
+    return {
+        status: "successful",
+        message: "Transfer Successful",
+        data: { 
+            reference: `swaggies_p2p_${generatedTransactionReference}`,
+            swagid: `${swag_id}`
+        }
+    };
+}
 
 
 const retryTransfer = async (transactionId) => {
@@ -137,4 +178,4 @@ const getTransferFees = async (amount) => {
 
 
 
-module.exports = { makePayment, verifyPayment, transferFund, retryTransfer, getTransferFees };
+module.exports = { makePayment, verifyPayment, makeTransfer, makeP2PTransfer, retryTransfer, getTransferFees };

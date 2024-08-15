@@ -23,7 +23,7 @@ exports.createUserWallet = async (req, res) => {
     if (existingWallet) {
       return res.status(httpStatus.BAD_REQUEST).json({ message: "User already has a wallet" });
     }
-    ///console.log('User ID (createUserWallet):', userId);
+
     const wallet = await walletService.createWallet(userId, walletName);
     res.status(httpStatus.OK).json(wallet);
   } catch (error) {
@@ -32,16 +32,17 @@ exports.createUserWallet = async (req, res) => {
   }
 };
 
+
 exports.setWalletPin = async (req, res) => {
   try {
     const userId = req.user.user_id;
-    const { walletName, pin, confirm_pin } = req.body;
+    const {  pin, confirm_pin } = req.body;
 
     if (pin !== confirm_pin) {
       return res.status(httpStatus.BAD_REQUEST).json({ message: "PIN and confirm PIN do not match" });
     }
 
-    const wallet = await walletService.setWalletPin({ userId, walletName, pin });
+    const wallet = await walletService.setWalletPin({ userId, pin });
     res.status(httpStatus.OK).json({
       success: true,
       message: "Set pin successfully!",
@@ -107,24 +108,35 @@ exports.verifyWalletFunding = async (req, res) => {
 
 exports.transferFunds = async (req, res) => {
   try {
+    const { amount, account_bank, account_number, swag_id, pin, narration, transferType } = req.body;
+    const user = req.user;
+    const userId = user.user_id;
 
-    const { amount, accountBank, accountNumber, narration, beneficiary_name, walletPin } = req.body
-
-    const walletData = {
-      amount,
-      accountBank,
-      accountNumber,
-      narration,
-      beneficiary_name,
-      walletPin
+    const wallet = await walletService.getWalletByUserId(userId);
+    if (wallet.isBanned) {
+      return res.status(httpStatus.FORBIDDEN).json({
+        message: "Your account is banned. Please contact customer support."
+      })
     }
 
-    await walletService.transferFund(walletData)
+    const transferData = {
+      user,
+      amount,
+      account_bank,
+      account_number,
+      swag_id,
+      pin,
+      narration,
+      transferType
+    };
+
+    const transfer = await walletService.transferFund(transferData);
 
     return res.status(httpStatus.CREATED).send({
       success: true,
-      message: "Transfer Successful"
-    })
+      message: "Transfer Successful",
+      transfer,
+    });
   } catch (error) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
       success: false,
@@ -132,4 +144,4 @@ exports.transferFunds = async (req, res) => {
       error: error.message,
     });
   }
-}
+};

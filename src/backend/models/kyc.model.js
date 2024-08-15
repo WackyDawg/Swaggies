@@ -1,7 +1,7 @@
 const { Schema, model, default: mongoose } = require('mongoose')
 
 const kycSchema = Schema ({
-    user: [{
+    userId: [{
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true

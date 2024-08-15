@@ -12,8 +12,8 @@ const { generateToken } = require('../utils/jwtUtils');
  * @returns {Promise<Object>} The created user with a JWT token.
  * @throws {Error} If input validation fails or user already exists.
  */
-const registerUser = async (firstName, lastName, email, password) => {
-    if (!(email && password && firstName && lastName)) {
+const registerUser = async (swagId, firstName, lastName, email, password) => {
+    if (!(swagId && email && password && firstName && lastName)) {
         throw new Error("All input is required");
     }
 
@@ -25,6 +25,7 @@ const registerUser = async (firstName, lastName, email, password) => {
     const encryptedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
+        swag_id: swagId,
         first_name: firstName, 
         last_name: lastName,
         email: email.toLowerCase(),

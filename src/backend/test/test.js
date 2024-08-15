@@ -3,9 +3,18 @@ const axios = require('axios');
 const BASE_URL = 'http://localhost:9000';
 
 const registerData = {
+  swag_id: '@john_syres',
   first_name: 'John',
   last_name: 'Doe',
   email: 'johndoe@example.com',
+  password: 'SecurePassword123',
+};
+
+const registerData2 = {
+  swag_id: '@jane_syres',
+  first_name: 'Jane',
+  last_name: 'Doe',
+  email: 'janedoe@example.com',
   password: 'SecurePassword123',
 };
 
@@ -15,11 +24,25 @@ const loginData = {
 };
 
 const walletData = {
-  walletName: 'Account1'
+  walletName: 'Primary wallet'
 };
 
 const fundingData = {
   amount: 3000,
+}
+
+const bankTransferData = {
+  account_bank : '044',
+  account_number: '0690000040',
+  swag_id: '@jane_syres',
+  amount: 5000,
+  transferType: 'bank',
+  narration: 'Akhlm Pstmn Trnsfr xx007',
+  pin: 1111,
+}
+
+const bvnData = {
+  bvn : ""
 }
 
 const pin = 1111;
@@ -29,8 +52,8 @@ let token = '';
 let userId = ''; 
 let transactionId = '';
 
-// Function to test registration
 const testRegister = async () => {
+  console.log("==> Register first user")
   try {
     const response = await axios.post(`${BASE_URL}/api/1.0/users/register`, registerData);
     console.log('Register Response:', response.data);
@@ -42,10 +65,23 @@ const testRegister = async () => {
     }
   }
 };
+const testRegister2 = async () => {
+  console.log("==> Register second user")
+  try {
+    const response = await axios.post(`${BASE_URL}/api/1.0/users/register`, registerData2);
+    console.log('User 2 Register Response:', response.data);
+  } catch (error) {
+    if (error.response) {
+      console.log('Register Error:', error.response.data);
+    } else {
+      console.log('Register Error:', error.message);
+    }
+  }
+};
 
-// Function to test login
 const testLogin = async () => {
   try {
+    console.log("==> Login test for first user")
     const response = await axios.post(`${BASE_URL}/api/1.0/users/login`, loginData);
     console.log('Login Response:', response.data);
     token = response.data.results.token; 
@@ -61,6 +97,7 @@ const testLogin = async () => {
 
 const getProfile = async () => {
   try {
+    console.log("==> Get first user profile")
     const response = await axios.get(`${BASE_URL}/api/1.0/users/profile`, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -74,7 +111,6 @@ const getProfile = async () => {
   }
 };
 
-// Function to test validating wallet
 const testValidateWallet = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/api/1.0/wallet/validate`, {
@@ -90,30 +126,11 @@ const testValidateWallet = async () => {
   }
 };
 
-// Function to test creating a wallet
-const testCreateWallet = async (walletData) => {
-  try {
-    const response = await axios.post(`${BASE_URL}/api/1.0/wallet/create-wallet`, walletData, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    console.log('Create Wallet Response:', response.data);
-    const walletName = response.data.walletName;
-    await testCreateWalletPin(userId, walletName);
-  } catch (error) {
-    if (error.response) {
-      console.log('Create Wallet Error:', error.response.data);
-    } else {
-      console.log('Create Wallet Error:', error.message);
-    }
-  }
-};
 
-// Function to test wallet pin creation
-const testCreateWalletPin = async (userId, walletName) => {
+const testCreateWalletPin = async (userId) => {
   try {
     const response = await axios.post(`${BASE_URL}/api/1.0/wallet/setpin-wallet`, {
       userId: userId,
-      walletName: walletName,
       pin: pin,
       confirm_pin: confirmPin,
     }, {
@@ -129,14 +146,13 @@ const testCreateWalletPin = async (userId, walletName) => {
   }
 };
 
-// Function to test wallet funding
 const testFundWallet = async () => {
   try {
     const response = await axios.post(`${BASE_URL}/api/1.0/wallet/deposit-wallet`, fundingData, {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log('Fund Wallet Response:', response.data);
-    transactionId = response.data.transaction_id; // Capture transaction ID for verification test
+    transactionId = response.data.transaction_id;
   } catch (error) {
     if (error.response) {
       console.log('Fund Wallet Error:', error.response.data);
@@ -146,30 +162,45 @@ const testFundWallet = async () => {
   }
 };
 
-// Function to test verifying wallet funding
-// const testVerifyWalletFunding = async () => {
-//   try {
-//     const response = await axios.get(`${BASE_URL}/api/1.0/wallet/verify?status=successful&tx_ref=PID-RWBWLFEU4Y&transaction_id=3179773`, {
-      
-//       headers: { Authorization: `Bearer ${token}` },
-//     });
-//     console.log('Verify Wallet Funding Response:', response.data);
-//   } catch (error) {
-//     if (error.response) {
-//       console.log('Verify Wallet Funding Error:', error.response.data);
-//     } else {
-//       console.log('Verify Wallet Funding Error:', error.message);
-//     }
-//   }
-// };
+const bankTransfer = async () => {
+  try {
+    const response = await axios.post(`${BASE_URL}/api/1.0/wallet/transfer`, bankTransferData, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    console.log("Bank Transfer Response:", response.data)
+  } catch (error) {
+    if (error.response) {
+      console.log('Bank Transfer Error:', error.response.data);
+    } else {
+      console.log('Bank Transfer Error:', error.message);
+    }
+  }
+}
+
+const verifyBvn = async () => {
+  try {
+    const response = await axios.post(`${BASE_URL}/api/1.0/kyc/bvn/verification`, bvnData, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    console.log("Verify BVN Response", response.data)
+  } catch (error) {
+   if (error.response) {
+    console.log("Verify BVN Error:", error.response.data)
+   } else {
+    console.log("Verify BVN Error:", error.message)
+   }
+}
+}
 
 // Run tests
 (async () => {
   await testRegister();
+  await testRegister2();
   await testLogin();
   await getProfile();
   await testValidateWallet();
-  await testCreateWallet(walletData);
+  await testCreateWalletPin();
   await testFundWallet();
-  // await testVerifyWalletFunding(); // Verify wallet funding after funding
+  await bankTransfer();
+  await verifyBvn();
 })();

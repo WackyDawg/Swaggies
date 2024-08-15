@@ -43,6 +43,11 @@ const transactionSchema  = new mongoose.Schema(
             required: [true, "payment gateway is required"],
             enum: ["flutterwave"],
         },
+        transaction_type: {
+            type: String,
+            required: true,
+            enum: ["disburse", "funding", "p2p"]
+        },
     },
     { 
         timestamps: true 
