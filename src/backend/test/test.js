@@ -32,14 +32,15 @@ const fundingData = {
 }
 
 const bankTransferData = {
-  account_bank : '044',
+  account_bank: '044',
   account_number: '0690000040',
-  swag_id: '@jane_syres',
+  swag_id: ['@jane_syres'],
   amount: 5000,
-  transferType: 'bank',
-  narration: 'Akhlm Pstmn Trnsfr xx007',
+  transferType: 'bank',  // Specify 'p2p' for peer-to-peer transfers or 'bank' for bank transfers 
+  narration: '',
   pin: 1111,
-}
+};
+
 
 const bvnData = {
   bvn : ""
@@ -53,7 +54,7 @@ let userId = '';
 let transactionId = '';
 
 const testRegister = async () => {
-  console.log("==> Register first user")
+  console.log("==> Registering first user")
   try {
     const response = await axios.post(`${BASE_URL}/api/1.0/users/register`, registerData);
     console.log('Register Response:', response.data);
@@ -66,7 +67,7 @@ const testRegister = async () => {
   }
 };
 const testRegister2 = async () => {
-  console.log("==> Register second user")
+  console.log("==> Registering second user")
   try {
     const response = await axios.post(`${BASE_URL}/api/1.0/users/register`, registerData2);
     console.log('User 2 Register Response:', response.data);

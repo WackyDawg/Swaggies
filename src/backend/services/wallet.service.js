@@ -1,18 +1,23 @@
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 const Wallet = require("../models/wallet");
 const User = require("../models/user");
 const WalletTransaction = require("../models/wallet_transaction");
 const Transaction = require("../models/transaction");
 const NotFoundError = require("../utils/errors/notfound.error");
-const { makePayment, verifyPayment, makeTransfer, makeP2PTransfer, withdrawPayment } = require("../helpers/payment.helpers");
-
+const {
+  makePayment,
+  verifyPayment,
+  makeTransfer,
+  makeP2PTransfer,
+  withdrawPayment,
+} = require("../helpers/payment.helpers");
 
 // Get Wallet by User ID
 async function getWalletByUserId(userId) {
   try {
-      return await Wallet.findOne({ userId });
+    return await Wallet.findOne({ userId });
   } catch (error) {
-      throw new Error("Internal server error");
+    throw new Error("Internal server error");
   }
 }
 
@@ -27,11 +32,7 @@ const incrementPinAttempts = async (userId) => {
 
 // Reset PIN attempts
 const resetPinAttempts = async (userId) => {
-  await Wallet.findOneAndUpdate(
-    { userId },
-    { pinAttempts: 0 },
-    { new: true }
-  );
+  await Wallet.findOneAndUpdate({ userId }, { pinAttempts: 0 }, { new: true });
 };
 
 /**
@@ -41,7 +42,7 @@ const resetPinAttempts = async (userId) => {
  */
 const validateUserWallet = async (userId) => {
   try {
-    const userWallet = await Wallet.findOne({ userId })
+    const userWallet = await Wallet.findOne({ userId });
 
     if (!userWallet) {
       throw new NotFoundError("You Do Not Have Any Wallet");
@@ -53,12 +54,14 @@ const validateUserWallet = async (userId) => {
       console.error("User error:", error.message);
       throw error;
     } else {
-      console.error("Internal server error while validating user wallet:", error);
+      console.error(
+        "Internal server error while validating user wallet:",
+        error
+      );
       throw new Error("Internal Server Error");
     }
   }
-}
-
+};
 
 // /**
 //  * Retrieves the user's wallet by user ID.
@@ -103,7 +106,6 @@ const createWallet = async (userId, walletType) => {
   }
 };
 
-
 /**
  * Set Wallet Pin
  * @param {Object} walletData
@@ -132,7 +134,7 @@ const setWalletPin = async (walletData) => {
   }
 
   return wallet;
-}
+};
 
 /**
  * Fund Wallet
@@ -147,13 +149,20 @@ const fundWallet = async (walletData) => {
 
   let appUrl;
   if (!frontendBaseUrl) {
-    appUrl = process.env.APP_URL ? process.env.APP_URL : "http://localhost:9000";
+    appUrl = process.env.APP_URL
+      ? process.env.APP_URL
+      : "http://localhost:9000";
   } else {
-    appUrl = frontendBaseUrl
+    appUrl = frontendBaseUrl;
   }
 
-  return makePayment(amount, user, `${appUrl}/api/1.0/wallet/verify`, "Wallet Funding");
-}
+  return makePayment(
+    amount,
+    user,
+    `${appUrl}/api/1.0/wallet/verify`,
+    "Wallet Funding"
+  );
+};
 
 const verifyWalletFunding = async (walletData) => {
   try {
@@ -163,7 +172,7 @@ const verifyWalletFunding = async (walletData) => {
     if (!user || payment.customer.email !== user.email) {
       return Promise.reject({
         success: false,
-        message: 'Could not verify payment',
+        message: "Could not verify payment",
       });
     }
 
@@ -175,7 +184,7 @@ const verifyWalletFunding = async (walletData) => {
     if (existingTransaction) {
       return Promise.resolve({
         success: true,
-        message: 'Transaction already exists',
+        message: "Transaction already exists",
       });
     }
 
@@ -187,9 +196,9 @@ const verifyWalletFunding = async (walletData) => {
       email: payment.customer.email,
       amount: payment.amount,
       currency: payment.currency,
-      transaction_type: 'funding',
+      transaction_type: "funding",
       paymentStatus: payment.status,
-      paymentGateway: 'flutterwave',
+      paymentGateway: "flutterwave",
     });
 
     await newTransaction.save();
@@ -199,7 +208,7 @@ const verifyWalletFunding = async (walletData) => {
     if (!userWallet) {
       return Promise.reject({
         success: false,
-        message: 'User does not have a wallet',
+        message: "User does not have a wallet",
       });
     }
 
@@ -210,8 +219,8 @@ const verifyWalletFunding = async (walletData) => {
       transactionId: payment.id,
       tx_ref: payment.tx_ref,
       isInflow: true,
-      paymentMethod: 'flutterwave',
-      transaction_type: 'funding',
+      paymentMethod: "flutterwave",
+      transaction_type: "funding",
       currency: payment.currency,
       status: payment.status,
     });
@@ -227,7 +236,7 @@ const verifyWalletFunding = async (walletData) => {
     if (!updatedWallet) {
       return Promise.reject({
         success: false,
-        message: 'Failed to update wallet balance',
+        message: "Failed to update wallet balance",
       });
     }
 
@@ -235,20 +244,30 @@ const verifyWalletFunding = async (walletData) => {
 
     return Promise.resolve({
       success: true,
-      message: 'Payment verified successfully',
+      message: "Payment verified successfully",
     });
   } catch (error) {
     return Promise.reject({
       success: false,
-      message: 'Error verifying payment',
+      message: "Error verifying payment",
       error: error.message,
     });
   }
 };
 
 const transferFund = async (transferData) => {
-  const { user, pin, amount, account_bank, account_number,swag_id, narration, transferType } = transferData;
+  const {
+    user,
+    pin,
+    amount,
+    account_bank,
+    account_number,
+    swag_id,
+    narration,
+    transferType,
+  } = transferData;
   const userId = user.user_id;
+  const senderSwagId = user.swag_id;
 
   const wallet = await getWalletByUserId(userId);
   if (!wallet) {
@@ -259,12 +278,10 @@ const transferFund = async (transferData) => {
   if (!isPinValid) {
     await incrementPinAttempts(userId);
 
-    // Ensure wallet.pinAttempts is a number and define maxAttempts
     const maxAttempts = 4;
     const currentAttempts = wallet.pinAttempts || 0;
     const attemptsLeft = maxAttempts - currentAttempts;
 
-    // If maxAttempts is reached, ban the user
     if (currentAttempts >= maxAttempts) {
       await Wallet.findOneAndUpdate({ userId }, { isBanned: true });
       throw new Error("Account banned due to multiple failed PIN attempts");
@@ -284,45 +301,105 @@ const transferFund = async (transferData) => {
 
   let transferResponse;
 
-  if (transferType === 'bank') {
-    transferResponse = await makeTransfer(amount, account_bank, account_number, narration);
-} else if (transferType === 'p2p') {
-    transferResponse = await makeP2PTransfer(swag_id, amount);
-}
+  if (transferType === "bank") {
+    transferResponse = await makeTransfer(
+      amount,
+      account_bank,
+      account_number,
+      narration
+    );
+  } else if (transferType === "p2p") {
+    // Prevent self-transfer
+    if (Array.isArray(swag_id)) {
+      if (swag_id.includes(senderSwagId)) {
+        throw new Error("You cannot send funds to self.");
+      }
+    } else {
+      if (swag_id === senderSwagId) {
+        throw new Error("You cannot send funds to self.");
+      }
+    }
 
-const transactionType = transferType === 'p2p' ? 'p2p' : 'disburse';
+    if (Array.isArray(swag_id)) {
+      // Perform multiple P2P transfers asynchronously
+      const transferPromises = swag_id.map(async (id) => {
+        return await makeP2PTransfer(id, amount);
+      });
 
-await WalletTransaction.create({
-  amount,
-  userId,
-  walletId: wallet._id,
-  description: `${narration}`,
-  transactionId: transferResponse.data.id,
-  tx_ref: transferResponse.data.reference,
-  currency: 'NGN',
-  isInflow: false,
-  paymentMethod: transferType === 'p2p' ? 'p2p_transfer' : 'bank_transfer',
-  status: transferResponse.status,
-  account_number: transferResponse.data.account_number,
-  bank_name: transferResponse.data.bank_name,
-  recipient: transferResponse.data.swagid,
-  transaction_type: transactionType
-});
+      transferResponse = await Promise.all(transferPromises);
+    } else {
+      // Single P2P transfer
+      transferResponse = await makeP2PTransfer(swag_id, amount);
+    }
+  }
 
+  const transactionType = transferType === "p2p" ? "p2p" : "disburse";
+
+  const description = transferType === 'bank'
+    ? `${user.firstname} ${user.lastname} to ${transferResponse.data.full_name || account_number}\nSent ₦${amount} to ${transferResponse.data.bank_name} - ${transferResponse.data.account_number}`
+    : `${user.firstname} ${user.lastname} sent ₦${amount} to recipient (${swag_id})`;
+
+  const transactions = Array.isArray(transferResponse)
+    ? transferResponse
+    : [transferResponse];
+
+  await Promise.all(
+    transactions.map((response) => {
+      const isP2P = transferType === 'p2p';
+      return WalletTransaction.create({
+        amount,
+        userId,
+        walletId: wallet._id,
+        description: narration || description,
+        account_number: isP2P ? undefined : transferResponse.data.account_number,
+        bank_name: isP2P ? undefined : transferResponse.data.bank_name,
+        transactionId: response.data.id,
+        tx_ref: isP2P ? response.data.reference : transferResponse.data.reference,
+        currency: "NGN",
+        isInflow: false,
+        paymentMethod: isP2P ? 'p2p_transfer' : 'bank_transfer',
+        status: isP2P ? response.status : transferResponse.status,
+        recipient: isP2P ? response.data.swagid : undefined,
+        transaction_type: transactionType,
+      });
+    })
+  );
+
+  await Promise.all(
+    transactions.map((response) => {
+      const isP2P = transferType === 'p2p';
+      return Transaction.create({
+        amount,
+        userId,
+        walletId: wallet._id,
+        name: `${user.firstname + " " + user.lastname}`,
+        email: `${user.email}`,
+        transactionId: response.data.id,
+        tx_ref: isP2P ? response.data.reference : transferResponse.data.reference,
+        currency: "NGN",
+        isInflow: false,
+        paymentMethod: isP2P ? 'p2p_transfer' : 'bank_transfer',
+        paymentStatus: isP2P ? response.status : transferResponse.status,
+        paymentGateway: "flutterwave",
+        transaction_type: transactionType,
+      });
+    })
+  );
   return transferResponse;
 };
 
+
 const withdrawFund = async () => {
   // Implementation here
-}
+};
 
 const getWalletBalance = async () => {
   // Implementation here
-}
+};
 
 const getBanks = async () => {
   // Implementation here
-}
+};
 
 module.exports = {
   validateUserWallet,
@@ -337,5 +414,5 @@ module.exports = {
   transferFund,
   withdrawFund,
   getWalletBalance,
-  getBanks
+  getBanks,
 };

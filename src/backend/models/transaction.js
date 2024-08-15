@@ -35,13 +35,20 @@ const transactionSchema  = new mongoose.Schema(
         },
         paymentStatus: {
             type: String,
-            enum: ["successful", "pending", "failed"], 
+            enum: ["successful", "success", "pending", "failed"], 
             default: "pending",
-        },
+        }, 
         paymentGateway: {
-            type: String,
+            type: String, 
             required: [true, "payment gateway is required"],
             enum: ["flutterwave"],
+        },
+        paymentMethod: {
+            type: String,
+            default: "flutterwave"
+        },
+        isInflow: {
+            type: Boolean
         },
         transaction_type: {
             type: String,

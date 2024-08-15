@@ -15,6 +15,7 @@ const verificationRouter = require('./routes/verificationRoutes.js')
 const NotFoundError = require('./utils/errors/notfound.error.js');
 
 const app = express();
+
 app.use(express.json());
 
 // set security HTTP headers
