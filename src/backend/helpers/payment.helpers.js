@@ -130,7 +130,8 @@ async function makeP2PTransfer(swag_id, amount) {
         message: "Transfer Successful",
         data: { 
             reference: `swaggies_p2p_${generatedTransactionReference}`,
-            swagid: `${swag_id}`
+            swagid: `${swag_id}`,
+            full_name: recipient.first_name + " " + recipient.last_name
         }
     };
 }

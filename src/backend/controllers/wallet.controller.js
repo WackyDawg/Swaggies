@@ -5,12 +5,14 @@ const wallet = require("../models/wallet");
 exports.validateUserWallet = async (req, res) => {
   try {
     const userId = req.user.user_id;
-    //console.log('User ID (validateUserWallet):', userId); 
+    //console.log('User ID (validateUserWallet):', userId);
     const wallet = await walletService.validateUserWallet(userId);
     res.status(httpStatus.OK).json(wallet);
   } catch (error) {
     console.error("Validate Wallet Error:", error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ message: error.message });
   }
 };
 
@@ -21,36 +23,43 @@ exports.createUserWallet = async (req, res) => {
 
     const existingWallet = await walletService.validateUserWallet(userId);
     if (existingWallet) {
-      return res.status(httpStatus.BAD_REQUEST).json({ message: "User already has a wallet" });
+      return res
+        .status(httpStatus.BAD_REQUEST)
+        .json({ message: "User already has a wallet" });
     }
 
     const wallet = await walletService.createWallet(userId, walletName);
     res.status(httpStatus.OK).json(wallet);
   } catch (error) {
     console.error("Create Wallet Error:", error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ message: error.message });
   }
 };
-
 
 exports.setWalletPin = async (req, res) => {
   try {
     const userId = req.user.user_id;
-    const {  pin, confirm_pin } = req.body;
+    const { pin, confirm_pin } = req.body;
 
     if (pin !== confirm_pin) {
-      return res.status(httpStatus.BAD_REQUEST).json({ message: "PIN and confirm PIN do not match" });
+      return res
+        .status(httpStatus.BAD_REQUEST)
+        .json({ message: "PIN and confirm PIN do not match" });
     }
 
     const wallet = await walletService.setWalletPin({ userId, pin });
     res.status(httpStatus.OK).json({
       success: true,
       message: "Set pin successfully!",
-      result: wallet
+      result: wallet,
     });
   } catch (error) {
     console.error("Set Wallet Pin Error:", error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ message: error.message });
   }
 };
 
@@ -62,10 +71,10 @@ exports.fundWallet = async (req, res) => {
     const walletData = {
       amount,
       user,
-      frontend_base_url
-    }
+      frontend_base_url,
+    };
 
-    const paymentLink = await walletService.fundWallet(walletData); 
+    const paymentLink = await walletService.fundWallet(walletData);
     return res.status(httpStatus.CREATED).send({
       success: true,
       message: "Initialized Wallet Funding",
@@ -79,44 +88,54 @@ exports.fundWallet = async (req, res) => {
       error: error.message,
     });
   }
-}
+};
 
 exports.verifyWalletFunding = async (req, res) => {
   try {
     const { transaction_id } = req.query;
     const walletData = { transaction_id };
 
-    const verificationResult = await walletService.verifyWalletFunding(walletData);
-    console.log(verificationResult)
+    const verificationResult = await walletService.verifyWalletFunding(
+      walletData
+    );
+    console.log(verificationResult);
 
     if (!verificationResult.success) {
       return res.status(400).json({
-        response: 'Could not verify payment',
+        response: "Could not verify payment",
         message: verificationResult.message,
       });
     }
 
     res.status(200).json({
-      response: 'wallet funded successfully',
+      response: "wallet funded successfully",
       message: verificationResult.message,
     });
   } catch (err) {
-    console.error('Response Error:', err);
-    res.status(500).send('Internal Server Error');
+    console.error("Response Error:", err);
+    res.status(500).send("Internal Server Error");
   }
 };
 
 exports.transferFunds = async (req, res) => {
   try {
-    const { amount, account_bank, account_number, swag_id, pin, narration, transferType } = req.body;
+    const {
+      amount,
+      account_bank,
+      account_number,
+      swag_id,
+      pin,
+      narration,
+      transferType,
+    } = req.body;
     const user = req.user;
     const userId = user.user_id;
 
     const wallet = await walletService.getWalletByUserId(userId);
     if (wallet.isBanned) {
       return res.status(httpStatus.FORBIDDEN).json({
-        message: "Your account is banned. Please contact customer support."
-      })
+        message: "Your account is banned. Please contact customer support.",
+      });
     }
 
     const transferData = {
@@ -127,7 +146,7 @@ exports.transferFunds = async (req, res) => {
       swag_id,
       pin,
       narration,
-      transferType
+      transferType,
     };
 
     const transfer = await walletService.transferFund(transferData);
@@ -145,3 +164,62 @@ exports.transferFunds = async (req, res) => {
     });
   }
 };
+
+exports.getWalletBalance = async (req, res) => {
+  try {
+    const userId = req.user.user_id;
+
+    const walletBalance = await walletService.getWalletBalance(userId);
+
+    return res.status(httpStatus.OK).send({
+      success: true,
+      message: "Returned wallet balance successfully",
+      balance: walletBalance,
+    });
+  } catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+      success: false,
+      message: "Failed to return wallet balance",
+      error: error.message,
+    });
+  }
+};
+
+exports.getWalletransaction = async (req, res) => {
+  try {
+    const userId = req.user.user_id;
+
+    if (!userId) {
+      return res.status(httpStatus.NOT_FOUND).send({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const page = parseInt(req.query.page, 10) || 1;
+
+    const { transactions, total } = await walletService.getTransactions(userId, limit, page);
+
+    return res.status(httpStatus.OK).send({
+      success: true,
+      message: "Returned transactions successfully",
+      result: {
+        data: transactions,
+        pagination: {
+          total,
+          limit,
+          page,
+          totalPages: Math.ceil(total / limit),
+        },
+      },
+    });
+  } catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+      success: false,
+      message: "Failed to return wallet transaction",
+      error: error.message,
+    });
+  }
+};
+

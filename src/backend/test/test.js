@@ -36,7 +36,7 @@ const bankTransferData = {
   account_number: '0690000040',
   swag_id: ['@jane_syres'],
   amount: 5000,
-  transferType: 'bank',  // Specify 'p2p' for peer-to-peer transfers or 'bank' for bank transfers 
+  transferType: 'p2p',  // Specify 'p2p' for peer-to-peer transfers or 'bank' for bank transfers 
   narration: '',
   pin: 1111,
 };
@@ -178,6 +178,36 @@ const bankTransfer = async () => {
   }
 }
 
+const getWalletBal = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/1.0/wallet/balance`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    console.log('Wallet Balance Response:', response.data);
+  } catch (error) {
+    if (error.response) {
+      console.log('Wallet Balance  Error:', error.response.data);
+    } else {
+      console.log('Wallet Balance  Error:', error.message);
+    }
+  }
+};
+
+const getWalletTransaction = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/1.0/wallet/transactions?limit=10&page=1`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    console.log('Wallet Transaction Response:', response.data);
+  } catch (error) {
+    if (error.response) {
+      console.log('Wallet Transaction  Error:', error.response.data);
+    } else {
+      console.log('Wallet Transaction  Error:', error.message);
+    }
+  }
+};
+
 const verifyBvn = async () => {
   try {
     const response = await axios.post(`${BASE_URL}/api/1.0/kyc/bvn/verification`, bvnData, {
@@ -203,5 +233,7 @@ const verifyBvn = async () => {
   await testCreateWalletPin();
   await testFundWallet();
   await bankTransfer();
+  await getWalletBal();
+  await getWalletTransaction();
   await verifyBvn();
 })();

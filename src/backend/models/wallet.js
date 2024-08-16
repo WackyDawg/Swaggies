@@ -23,6 +23,12 @@ const walletSchema = Schema (
             enum: ["primary", "savings", "emergency", "investment", "travel", "business", "kids"],
             default: "primary"
         },
+        walletCurrency: {
+           type: String,
+           required: false,
+           default: "NGN",
+           enum: ["NGN", "GBP", "USD", "GHC"]
+        },
         pinAttempts: { 
             type: Number, 
             default: 0 
