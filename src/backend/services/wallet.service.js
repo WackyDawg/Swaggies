@@ -324,7 +324,7 @@ const transferFund = async (transferData) => {
       // Perform multiple P2P transfers asynchronously
       const transferPromises = swag_id.map(async (id) => {
         return await makeP2PTransfer(id, amount);
-      });
+      }); //
 
       transferResponse = await Promise.all(transferPromises);
     } else {
