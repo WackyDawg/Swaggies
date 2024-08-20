@@ -2,7 +2,7 @@
   <img src="https://static.paidviewpoint.com/images/earnings/green_piggy.png" alt="wackydawg" width="400" />
 </p>
 
-<h1 align="center">Swaggies</h1>
+<h1 align="center">Swaggies</h1>  
 
 <p align="center">
   
