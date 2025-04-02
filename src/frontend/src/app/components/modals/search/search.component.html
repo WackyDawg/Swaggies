@@ -1,0 +1,31 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-end z-50">
+  <div [ngClass]="{'animate-slide-down': isOpen, 'animate-slide-up': !isOpen}" class="w-full h-[90%] bg-white rounded-t-[50px] shadow-lg z-10 px-6 pt-4 pb-2 relative flex flex-col gap-4">
+    
+    <!-- Search Bar -->
+    <div class="relative w-full h-auto flex items-center mt-4">
+      <svg class="absolute left-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M15.5,14l-0.8,0l-0.3,-0.3c1,-1.1 1.6,-2.6 1.6,-4.2C16,5.9 13.1,3 9.5,3C5.9,3 3,5.9 3,9.5S5.9,16 9.5,16c1.6,0 3.1,-0.6 4.2,-1.6l0.3,0.3l0,0.8l5,5l1.5,-1.5L15.5,14zM9.5,14C7,14 5,12 5,9.5S7,5 9.5,5C12,5 14,7 14,9.5S12,14 9.5,14z" />
+      </svg>
+
+      <input type="text" class="w-full p-3 pl-12 border rounded-full text-gray-500 bg-[#ececec] font-bold focus:outline-none" placeholder="Search transaction">
+
+      <div (click)="close()" class="bg-gray-400 rounded-full w-9 h-9 aspect-square flex items-center justify-center ml-2">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 47.5 47.5" id="cancel" width="20px" height="20px">
+          <defs>
+            <clipPath id="a">
+              <path d="M0 38h38V0H0v38Z"></path>
+            </clipPath>
+          </defs>
+          <g clip-path="url(#a)" transform="matrix(1.25 0 0 -1.25 0 47.5)">
+            <path fill="#414042" d="m23.238 18.996 9.883 9.883a3 3 0 1 1-4.242 4.242l-9.883-9.883-9.883 9.883a3 3 0 1 1-4.242-4.243l9.883-9.882-9.907-9.907A3 3 0 0 1 9.09 4.847l9.906 9.906 9.883-9.882A2.992 2.992 0 0 1 31 3.993a3 3 0 0 1 2.121 5.121l-9.883 9.882Z"></path>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="relative w-full h-[calc(100vh-160px)] overflow-y-auto flex-1">
+      <app-transaction-list />
+    </div>
+
+  </div>
+</div>

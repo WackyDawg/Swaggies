@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">swaggies</string>
+    <string name="title_activity_main">swaggies</string>
+    <string name="package_name">com.swaggies.app</string>
+    <string name="custom_url_scheme">com.swaggies.app</string>
+</resources>

@@ -1,0 +1,50 @@
+<div class="overflow-y-auto h-screen flex flex-col">
+  <main class="flex flex-col flex-1 w-full max-w-md mx-auto">
+    <div class="relative w-full h-[450px] bg-[#532cad]">
+      <div class="absolute inset-0 bg-[url('/assets/wavy-bg-black.72ada49b.png')] bg-cover bg-center bg-no-repeat"></div>
+      <header class="sticky top-0 z-20 flex justify-between items-center p-4">
+        <div>
+          <svg fill="#ffff" width="40px" height="40px" viewBox="-2 -2 24 24" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin" class="jam jam-qr-code">
+            <path d="M13 18h3a2 2 0 0 0 2-2v-3a1 1 0 0 1 2 0v3a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4v-3a1 1 0 0 1 2 0v3a2 2 0 0 0 2 2h3a1 1 0 0 1 0 2h6a1 1 0 0 1 0-2zM2 7a1 1 0 1 1-2 0V4a4 4 0 0 1 4-4h3a1 1 0 1 1 0 2H4a2 2 0 0 0-2 2v3zm16 0V4a2 2 0 0 0-2-2h-3a1 1 0 0 1 0-2h3a4 4 0 0 1 4 4v3a1 1 0 0 1-2 0z" />
+          </svg>
+        </div>
+
+        <div>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
+      </header>
+      <div class="relative z-10">
+        <div class="flex flex-col items-center justify-center h-full text-white">
+          <app-account-balance />
+          <app-account-info />
+        </div>
+
+        <app-action-buttons />
+
+        <div class="content-center pl-3">
+          <app-quick-access />
+        </div>
+
+
+      </div>
+    </div>
+
+    <section class="bg-white flex-1 mt-[-40px] rounded-t-[50px] shadow-lg z-10 overflow-y-auto">
+      <app-transaction-tabs [activeTab]="activeTab" (tabChanged)="onTabChange($event)" />
+
+      <div *ngIf="activeTab === 'tab1'" class="px-4 py-3">
+        <app-transaction-search (openRequest)="openModal()"/>
+        <app-transaction-list />
+      </div>
+
+      <div *ngIf="activeTab === 'tab2'" class="px-4 py-3">
+        <div class="p-4 text-center text-gray-500">
+          <h2 class="text-lg font-semibold">No Activity found</h2>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

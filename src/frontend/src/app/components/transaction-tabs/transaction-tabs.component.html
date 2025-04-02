@@ -1,0 +1,12 @@
+<div class="flex w-full mt-3 relative">
+  <button class="flex-1 text-center py-4 font-medium" (click)="setActiveTab('tab1')" [class.active]="activeTab === 'tab1'">
+    Transactions
+  </button>
+
+  <button class="flex-1 text-center py-4 font-medium" (click)="setActiveTab('tab2')" [class.active]="activeTab === 'tab2'">
+    Activity
+  </button>
+
+  <div class="absolute bottom-0 h-1 bg-pocket-purple transition-all duration-300" [ngStyle]="{'width': '50%', 'left': activeTab === 'tab1' ? '0%' : '50%'}">
+  </div>
+</div>
