@@ -42,14 +42,28 @@ If you encounter any issues or have suggestions for making Swaggies even wackier
 ## 🖼️ App UI Preview
 
 
-<p align="center">
-  <img src="assets/screen.png" width="45%" alt="Screen 1"/>
-  <img src="assets/screen2.png" width="45%" alt="Screen 2"/>
-</p>
-<p align="center">
-  <img src="assets/screen3.png" width="45%" alt="Screen 3"/>
-  <img src="assets/screen4.png" width="45%" alt="Screen 4"/>
-</p>
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="assets/screen.png" width="45%" alt="Screen 1"/><br/>
+      <sub>🏠 Home Screen</sub>
+    </td>
+    <td align="center">
+      <img src="assets/screen2.png" width="45%" alt="Screen 2"/><br/>
+      <sub>Fund wallet Feature</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="assets/screen3.png" width="45%" alt="Screen 3"/><br/>
+      <sub>📄 Details Page</sub>
+    </td>
+    <td align="center">
+      <img src="assets/screen4.png" width="45%" alt="Screen 4"/><br/>
+      <sub>⚙️ Settings</sub>
+    </td>
+  </tr>
+</table>
 
 
 ## License
