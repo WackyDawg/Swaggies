@@ -1,0 +1,29 @@
+<div class="scanner-wrapper relative">
+    <div (click)="navigateToHome()" class="cancel-button absolute top-4 left-4 z-50">
+        <svg class="w-11 h-11" xmlns="http://www.w3.org/2000/svg" fill="#ffff" viewBox="0 0 24 24" stroke="#ffff" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>          
+    </div>
+  <zxing-scanner *ngIf="hasPermission" class="fullscreen-scanner" [enable]="scannerEnabled" [torch]="torchEnabled" (scanSuccess)="handleQrCodeResult($event)" (camerasFound)="camerasFoundHandler($event)" (permissionResponse)="hasPermissionHandler($event)">
+  </zxing-scanner>
+
+  <div class="scanner-overlay">
+    <div class="flex justify-center items-center h-full">
+      <img src="/assets/img/focus.png" alt="QR Code Scanner" class="scanner-image" />
+    </div>
+
+    <div class="scanner-controls">
+      <button class="bg-black text-white rounded-full px-4 py-3 font-bold">
+        Scan a QR Code
+      </button>
+    </div>
+  </div>
+
+  <!-- <div class="scan-result" *ngIf="qrResult">
+    <p>
+      Scanned Result:
+      {{ qrResult }}
+    </p>
+    <button (click)="resetScanner()">Scan Again</button>
+  </div> -->
+</div>

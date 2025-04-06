@@ -1,18 +1,26 @@
 <div class="overflow-y-auto h-screen flex flex-col">
   <main class="flex flex-col flex-1 w-full max-w-md mx-auto">
-    <div class="relative w-full h-[450px] bg-[#532cad]">
+    <div class="relative w-full h-[450px]" [ngStyle]="{'background-color': selectedColor}">
       <div class="absolute inset-0 bg-[url('/assets/wavy-bg-black.72ada49b.png')] bg-cover bg-center bg-no-repeat"></div>
       <header class="sticky top-0 z-20 flex justify-between items-center p-4">
-        <div>
-          <svg fill="#ffff" width="40px" height="40px" viewBox="-2 -2 24 24" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin" class="jam jam-qr-code">
+        <div (click)="navigateToScanQr()" class="ml-4">
+          <svg fill="#ffff" width="30px" height="30px" viewBox="-2 -2 24 24" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin" class="jam jam-qr-code">
             <path d="M13 18h3a2 2 0 0 0 2-2v-3a1 1 0 0 1 2 0v3a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4v-3a1 1 0 0 1 2 0v3a2 2 0 0 0 2 2h3a1 1 0 0 1 0 2h6a1 1 0 0 1 0-2zM2 7a1 1 0 1 1-2 0V4a4 4 0 0 1 4-4h3a1 1 0 1 1 0 2H4a2 2 0 0 0-2 2v3zm16 0V4a2 2 0 0 0-2-2h-3a1 1 0 0 1 0-2h3a4 4 0 0 1 4 4v3a1 1 0 0 1-2 0z" />
           </svg>
         </div>
-
-        <div>
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" />
+ 
+        <div (click)="navigateToMessages()" class="mr-4">
+          <svg fill="#ffff" height="30px" width="30px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 458 458" xml:space="preserve">
+            <g>
+              <g>
+                <path d="M428,41.534H30c-16.569,0-30,13.431-30,30v252c0,16.568,13.432,30,30,30h132.1l43.942,52.243
+			c5.7,6.777,14.103,10.69,22.959,10.69c8.856,0,17.258-3.912,22.959-10.69l43.942-52.243H428c16.568,0,30-13.432,30-30v-252
+			C458,54.965,444.568,41.534,428,41.534z M323.916,281.534H82.854c-8.284,0-15-6.716-15-15s6.716-15,15-15h241.062
+			c8.284,0,15,6.716,15,15S332.2,281.534,323.916,281.534z M67.854,198.755c0-8.284,6.716-15,15-15h185.103c8.284,0,15,6.716,15,15
+			s-6.716,15-15,15H82.854C74.57,213.755,67.854,207.039,67.854,198.755z M375.146,145.974H82.854c-8.284,0-15-6.716-15-15
+			s6.716-15,15-15h292.291c8.284,0,15,6.716,15,15C390.146,139.258,383.43,145.974,375.146,145.974z" />
+              </g>
+            </g>
           </svg>
         </div>
       </header>
@@ -36,7 +44,7 @@
       <app-transaction-tabs [activeTab]="activeTab" (tabChanged)="onTabChange($event)" />
 
       <div *ngIf="activeTab === 'tab1'" class="px-4 py-3">
-        <app-transaction-search (openRequest)="openModal()"/>
+        <app-transaction-search />
         <app-transaction-list />
       </div>
 

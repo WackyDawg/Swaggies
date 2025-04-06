@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { ModalService } from '../../services/search-modal.service';
 
 @Component({
   selector: 'app-transaction-search',
@@ -6,11 +7,9 @@ import { Component, Output, EventEmitter } from '@angular/core';
   styleUrl: './transaction-search.component.css'
 })
 export class TransactionSearchComponent {
+  constructor(private modalService: ModalService) {}
 
-  @Output() openRequest = new EventEmitter<void>();
-
-  open() {
-    console.log('Transaction Search Clicked - Emitting openRequest');
-    this.openRequest.emit();
+  openSearchModal(){
+    this.modalService.openModal('searchModal');
   }
 }

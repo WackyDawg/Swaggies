@@ -1,0 +1,86 @@
+<div class="mt-4 w-full max-h-full">
+  <div class="w-auto px-3 h-[180px] rounded-tr-2xl rounded-tl-2xl rounded-br-2xl rounded-bl-2xl bg-[#f8f5fe]">
+    <div class="flex justify-between items-center py-3">
+      <div class="relative ml-4">
+        <h3 class="text-black font-semibold text-lg">My Bills</h3>
+      </div>
+      <div class="mr-2" (click)="navigateToMyBills()">
+        <app-settings-ico></app-settings-ico>
+      </div>
+    </div>
+
+    <div class="flex space-x-2 mb-5">
+      <div class="flex flex-col items-center">
+        <img class="rounded-full w-[75px] h-[75px]" src="/assets/bills.png" />
+        <h2 class="text-black font-medium mt-1">012400</h2>
+      </div>
+      <div class="flex flex-col items-center">
+        <img class="rounded-full w-[75px] h-[75px]" src="/assets/bills.png" />
+        <h2 class="text-black font-medium mt-1">012400</h2>
+      </div>
+      <div class="flex flex-col items-center">
+        <img class="rounded-full w-[75px] h-[75px]" src="/assets/bills.png" />
+        <h2 class="text-black font-medium mt-1">0124009</h2>
+      </div>
+    </div>
+  </div>
+  <div class="py-2"></div>
+
+  <div class="-mx-4">
+    <div class="border-b-[1px] border-gray-300 w-full px-3 py-3">
+      <h2 class="text-black font-semibold text-lg mb-5">Data & Airtime</h2>
+      <div class="flex space-x-2 mb-4">
+        <div *ngFor="let dataServicesProvider of dataProvider" class="flex flex-col items-center">
+          <img class="rounded-full w-[75px] h-[75px]" [src]="dataServicesProvider.icon" />
+          <h2 class="text-black font-medium mt-1">
+            {{ dataServicesProvider.name }}
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div class="border-b-[1px] border-gray-300 w-full px-4 py-3">
+      <h2 class="text-black font-semibold text-lg">TV</h2>
+      <div class="flex space-x-2 mb-4">
+        <div *ngFor="let tvProvider of payTvProvider" class="flex flex-col items-center">
+          <img class="rounded-full w-[75px] h-[75px]" [src]="tvProvider.icon" />
+          <h2 class="text-black font-medium mt-1">
+            {{ tvProvider.name }}
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div class="border-b-[1px] border-gray-300 w-full px-4 py-3">
+      <h2 class="text-black font-semibold text-lg">Electricity</h2>
+      <div class="flex space-x-2 mb-4">
+        <div *ngFor="let electProvider of electricityProvider" class="flex flex-col items-center">
+          <img class="rounded-full w-[75px] h-[75px]" [src]="electProvider.icon" />
+          <h2 class="text-black font-medium mt-1">
+            {{ electProvider.name }}
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div class="border-b-[1px] border-gray-300 w-full px-4 py-3">
+      <h2 class="text-black font-semibold text-lg">Betting</h2>
+      <div class="flex space-x-2 mb-4">
+        <div *ngFor="let betProvider of bettingProvider" class="flex flex-col items-center">
+          <img class="rounded-full w-[75px] h-[75px]" [src]="betProvider.icon" />
+          <h2 class="text-black font-medium mt-1">
+            {{ betProvider.name }}
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div class="border-b-[1px] border-gray-300 w-full px-4 py-3">
+      <h2 class="text-black font-semibold text-lg">Apps</h2>
+      <div class="flex space-x-2 mb-4">
+        <div *ngFor="let appProvider of appsProvider" class="flex flex-col items-center">
+          <img class="rounded-full w-[75px] h-[75px]" [src]="appProvider.icon" />
+          <h2 class="text-black font-medium mt-1">
+            {{ appProvider.name }}
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

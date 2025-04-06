@@ -1,0 +1,46 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-end z-50">
+  <div [ngClass]="{ 'animate-slide-down': isOpen, 'animate-slide-up': !isOpen }" class="w-full h-[68%] bg-white rounded-t-[50px] shadow-lg z-10 px-6 pt-4 pb-2 relative flex flex-col gap-4">
+    <div class="flex flex-col items-center">
+      <div class="bg-gray-400 w-10 h-2 rounded-full"></div>
+      <h1 class="text-center font-bold mt-3">Add Cash</h1>
+    </div>
+    <div class="flex items-center justify-between bg-[#cdc7c7] bg-opacity-50 rounded-r-xl rounded-l-xl py-3 px-4 mt-2">
+      <div>
+        <div class="text-gray-400 font-bold text-bold">Guarantee Trust Bank</div>
+        <div class="font-bold text-black">
+          {{ accountNumber1 }}
+        </div>
+      </div>
+      <button (click)="copyToClipboard(accountNumber1)" class="bg-transparent">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24.0" height="24.0" viewBox="0 0 24.0 24.0">
+          <path fill="#000000" fill-opacity="1.0" d="M16,1L4,1c-1.1,0 -2,0.9 -2,2v14h2L4,3h12L16,1zM19,5L8,5c-1.1,0 -2,0.9 -2,2v14c0,1.1 0.9,2 2,2h11c1.1,0 2,-0.9 2,-2L21,7c0,-1.1 -0.9,-2 -2,-2zM19,21L8,21L8,7h11v14z" />
+        </svg>
+      </button>
+    </div>
+    <div class="flex items-center justify-between bg-[#cdc7c7] bg-opacity-50 rounded-r-xl rounded-l-xl py-3 px-4">
+      <div>
+        <div class="text-gray-400 font-bold text-bold">VFD Microfinance Bank</div>
+        <div class="font-bold text-black">
+          {{ accountNumber2 }}
+        </div>
+      </div>
+      <button (click)="copyToClipboard(accountNumber2)" class="bg-transparent">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24.0" height="24.0" viewBox="0 0 24.0 24.0">
+          <path fill="#000000" fill-opacity="1.0" d="M16,1L4,1c-1.1,0 -2,0.9 -2,2v14h2L4,3h12L16,1zM19,5L8,5c-1.1,0 -2,0.9 -2,2v14c0,1.1 0.9,2 2,2h11c1.1,0 2,-0.9 2,-2L21,7c0,-1.1 -0.9,-2 -2,-2zM19,21L8,21L8,7h11v14z" />
+        </svg>
+      </button>
+    </div>
+    <div class="text-center text-gray-400 mt-4">
+      <p>Tell anyone to transfer to your <b>account number</b> above.</p>
+      <p class="mt-2">It <b>reflects immediately</b> on your Pocket App® balance ⚡</p>
+    </div>
+    <div class="mt-8 flex justify-center">
+      <button (click)="close()" class="text-black border border-gray-300 w-[350px] rounded-full font-bold py-2">Close</button>
+    </div>
+    <div class="flex justify-center mt-4">
+      <!-- <p class="bg-gray-400 text-white w-[120px] h-[35px] rounded-full flex items-center justify-center" *ngIf="copiedMessage">
+        {{ copiedMessage }}
+      </p> -->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="overflow-y-auto h-screen flex flex-col bg-white">
+    <main class="flex flex-col flex-1 w-full max-w-md mx-auto">
+      <header class="fixed top-0 left-0 z-20 w-full py-0 mt-0 flex flex-col items-center bg-white">
+        <div (click)="navigateBack()" class="absolute left-4 top-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24">
+            <path fill="rgb(0,0,0)" d="M15.41 16.59L10.83 12 15.41 7.41 14 6 8 12l6 6 1.41-1.41Z" />
+          </svg>
+        </div>
+  
+        <div class="flex justify-center items-center w-full mt-4 mb-3">
+          <h1 class="font-bold text-gray-800 text-lg">{{ title }}</h1>
+        </div>
+        <app-messages-tabs [activeTab]="activeTab" (tabChanged)="onTabChange($event)" class="relative flex w-full" />
+      </header>
+
+        <div class="flex-1 pt-16 px-4 overflow-y-auto">
+            <ng-container *ngIf="activeTab === 'tab1'">
+            <app-messages-inbox [GroupedMessages]="GroupedMessages" />
+            </ng-container>
+            <ng-container *ngIf="activeTab === 'tab2'">
+            <app-messages-sent />
+            </ng-container>
+        </div>    
+    </main>
+</div>

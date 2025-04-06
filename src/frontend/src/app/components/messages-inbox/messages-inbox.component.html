@@ -1,0 +1,20 @@
+<div class="mt-[70px] w-full max-h-full">
+<div *ngFor="let group of GroupedMessages">
+  <div class="px-4  mt-[3px]">
+    <h3 class="text-gray-500 font-medium">{{ group.date }}</h3>
+  </div>
+  <div class="flex flex-col space-y-3 gap-2 px-0 py-4 bg-white mb-2">
+    <div *ngFor="let msg of group.messages" class="flex items-center gap-3">
+        <img src="/assets/img/brands/showmax.png" alt="brand" class="w-[60px] h-[60px] rounded-full" />
+        <div class="flex flex-col">
+          <div class="text-gray-800 font-semibold leading-snug">
+            <strong>{{ msg.service }}</strong> {{ msg.heading}}
+          </div>
+          <p class="text-gray-600 leading-snug text-[14px]">
+            {{ msg.message }}
+          </p>          
+        </div>
+      </div>  
+  </div>
+</div>
+</div>

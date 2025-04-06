@@ -1,0 +1,9 @@
+<div class="flex w-full mt-3 border-b-[1px] border-gray-200 relative">
+    <button class="flex-1 text-center py-4 font-medium" (click)="setActiveTab('tab1')" [ngClass]="{'text-black': activeTab === 'tab1', 'text-gray-400': activeTab !== 'tab1'}">
+        Recieved
+    </button>
+    <button class="flex-1 text-center py-4 font-medium" (click)="setActiveTab('tab2')" [ngClass]="{'text-black': activeTab === 'tab2', 'text-gray-400': activeTab !== 'tab2'}">
+        Sent
+    </button>
+    <div class="absolute bottom-0 h-1 bg-pocket-purple transition-all duration-300"[ngStyle]="{ width: '50%', left: activeTab === 'tab1' ? '0%' : '50%'}"></div>
+</div>

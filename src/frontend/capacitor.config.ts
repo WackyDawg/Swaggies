@@ -4,6 +4,14 @@ const config: CapacitorConfig = {
   appId: 'com.swaggies.app',
   appName: 'swaggies',
   webDir: 'dist/vaultly/browser',
+  "plugins": {
+    "StatusBar": {
+      "overlaysWebView": false,
+      "style": "DARK",
+      "backgroundColor": "#ffffffff"
+    }
+  },
+ 
   // plugins: {
   //   SplashScreen: {
   //     launchAutoHide: true,

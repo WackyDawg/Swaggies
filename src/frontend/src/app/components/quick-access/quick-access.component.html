@@ -1,15 +1,15 @@
 <div class="flex gap-4 mt-6 pb-3 overflow-x-auto whitespace-nowrap scrollbar-hide scroll-smooth snap-x w-auto px-2">
-  <button class="flex-shrink-0 flex items-center gap-2 bg-white rounded-full py-1 px-3 snap-start">
+  <button (click)="navigateToBills()" class="flex-shrink-0 flex items-center gap-2 bg-white rounded-full py-1 px-3 snap-start">
     <img src="/assets/bills.png" alt="" srcset="" style="width: 35px; height: 35px;" />
     <span class="text-black font-medium whitespace-nowrap">Bills & Apps</span>
   </button>
- 
-  <button class="flex-shrink-0 flex items-center gap-2 bg-white rounded-full py-1 px-3 snap-start">
+
+  <button (click)="navigateToRequests()" class="flex-shrink-0 flex items-center gap-2 bg-white rounded-full py-1 px-3 snap-start">
     <img src="/assets/jet1.png" alt="" srcset="" style="width: 35px; height: 35px;" />
     <span class="text-black font-medium whitespace-nowrap">View Requests</span>
   </button>
 
-  <button class="flex-shrink-0 flex items-center gap-2 bg-white rounded-full py-1 px-3 snap-start">
+  <button (click)="navigateToGroups()" class="flex-shrink-0 flex items-center gap-2 bg-white rounded-full py-1 px-3 snap-start">
     <svg width="25" height="25" viewBox="0 0 83 83" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <path fill="url(#groups_svg__a)" d="M0 0h83v83H0z"></path>
       <defs>

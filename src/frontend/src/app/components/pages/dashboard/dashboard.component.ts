@@ -1,13 +1,23 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ModalService } from '../../../services/search-modal.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+  constructor(private router: Router, private modalService: ModalService) {}
+
+  colors: string[] = ['#bd0e0e', '#532cad', '#7436f5'];
+  selectedColor: string = '';
   lastScrollY = window.scrollY;
+
+
+  ngOnInit(): void {
+    this.selectedColor = this.colors[Math.floor(Math.random() * this.colors.length)];
+  }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
@@ -29,9 +39,12 @@ export class DashboardComponent {
     this.activeTab = tab; 
   }
 
-  constructor(private modalService: ModalService) {}
-
-  openModal() {
-    this.modalService.openModal();
+  navigateToScanQr() {
+    this.router.navigate(['/qr-scan']);
   }
+
+  navigateToMessages() {
+    this.router.navigate(['/messages'])
+  }
+  
 }

@@ -18,6 +18,7 @@
 
 <router-outlet></router-outlet>
 
-<app-bottom-navigation/>
+<app-bottom-navigation *ngIf="!hideComponent"/>
 
-<app-search *ngIf="isModalOpen" (closeModal)="closeModal()"></app-search>
+<app-search *ngIf="isSearchModalOpen" (closeModal)="closeSearchModal()"/>
+<app-add-cash *ngIf="isDepositModalOpen" (closeModal)="closeDepositModal()" />

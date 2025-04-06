@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 export class AccountBalanceComponent {
   isBalanceVisible: boolean = false;
 
-  balance: string = '793,443.99';
+  balance: string = '2,793,443.99';
 
   toggleBalanceVisibility() {
     this.isBalanceVisible = !this.isBalanceVisible;

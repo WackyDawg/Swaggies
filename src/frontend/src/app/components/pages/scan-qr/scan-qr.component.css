@@ -1,0 +1,69 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .scanner-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+  }
+  
+  .fullscreen-scanner {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+  }
+  
+  ::ng-deep video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+  
+  .scanner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  
+  .scanner-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    pointer-events: auto; 
+  }
+  
+  .scan-result {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 10000;
+  }
+
+  .cancel-button {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 999;
+  }
+  
