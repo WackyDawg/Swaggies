@@ -41,6 +41,17 @@ If you encounter any issues or have suggestions for making Swaggies even wackier
 
 ## 🖼️ App UI Preview
 
+
+<p align="center">
+  <img src="assets/screen.png" width="45%" alt="Screen 1"/>
+  <img src="assets/screen2.png" width="45%" alt="Screen 2"/>
+</p>
+<p align="center">
+  <img src="assets/screen3.png" width="45%" alt="Screen 3"/>
+  <img src="assets/screen4.png" width="45%" alt="Screen 4"/>
+</p>
+
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
